@@ -32,7 +32,7 @@ public class PatrolSystem : MonoBehaviour {
         Movement();
 	}
 
-    void OnDrawGizmosSelected()
+    void OnDrawGizmos()
     {
         for (int i = 0; i < wayPoints.Count; i++)
         {
