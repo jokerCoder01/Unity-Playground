@@ -7,4 +7,6 @@ This repo includes:
 
 -Simple Bug Reporter
 
+-Simple Localization System
+
 and some not completed experimental things because this repo is my Playground :)
