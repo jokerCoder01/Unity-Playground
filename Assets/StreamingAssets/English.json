@@ -1,0 +1,7 @@
+{
+	"items":
+	[
+		{"key":"say_hi","value":"Hi! You are seeing English localization file"},
+		{"key":"button_quit","value":"Quit Game"}
+	]
+}

@@ -1,15 +1,15 @@
 ﻿/*
  * 
  */
- 
+
+using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class LocalizationManager : MonoBehaviour {
 
-    public TextAsset languageAsset;
-    public string languageText;
-
-    private enum LanguageList
+    public static LocalizationManager instance;
+    public enum LanguageList
     {
         English,
         Turkish,
@@ -24,20 +24,27 @@ public class LocalizationManager : MonoBehaviour {
         Japanese,
         Korean,
     }
+
+    private Dictionary<string, string> localizedText;
     private LanguageList language = LanguageList.English;
-    private string languageFilePath = "";
+    private string missingTextString = "找不到文字！";
 
-    #region Properties
-    #endregion
+    public LanguageList Language { get { return language; } set { language = value; } }
 
-    // Use this for initialization
-    void Start()
+    void Awake()
     {
-        DetectLanguage();
-        LoadLanguage(languageFilePath);
-    }
+        if(instance == null)
+        {
+            instance = this;
+        }else if(instance != this)
+        {
+            Destroy(gameObject);
+        }
 
-    private void DetectLanguage()
+        DontDestroyOnLoad(gameObject);
+    } 
+
+    public void DetectLanguage()
     {
         switch (Application.systemLanguage)
         {
@@ -81,13 +88,38 @@ public class LocalizationManager : MonoBehaviour {
                 language = LanguageList.English;
                 break;
         }
-
-        languageFilePath = "Localization/" + language.ToString();
     }
 
-    private void LoadLanguage(string filePath)
+    public void LoadLanguage(string fileName)
     {
-        languageAsset = Resources.Load<TextAsset>(filePath);
-        languageText = languageAsset.text;
+        localizedText = new Dictionary<string, string>();
+        string filePath = Application.streamingAssetsPath + @"/" + fileName + ".json";
+
+        if (File.Exists(filePath))
+        {
+            string dataAsJson = File.ReadAllText(filePath);
+            LocalizationData loadedData = JsonUtility.FromJson<LocalizationData>(dataAsJson);
+
+            for (int i = 0; i < loadedData.items.Length; i++)
+            {
+                localizedText.Add(loadedData.items[i].key, loadedData.items[i].value);
+            }
+
+            Debug.Log("Data loaded, dictionary contains: " + localizedText.Count + " entries");
+        }
+        else
+        {
+            Debug.LogError("Cannot find file!");
+        }
+
+    }
+
+    public string GetLocalizedValue(string key)
+    {
+        string result = missingTextString;
+        if (localizedText.ContainsKey(key))
+            result = localizedText[key];
+
+        return result;
     }
 }
