@@ -120,9 +120,10 @@ public class Door_Editor : Editor {
                 myTarget.rotationSpeed = EditorGUILayout.FloatField("Rotation Speed", myTarget.rotationSpeed);
                 break;
             case Door.SpeedType.Time:
-                myTarget.rotationTime = EditorGUILayout.FloatField("Rotation Time", myTarget.rotationTime);
+                myTarget.rotationTime = EditorGUILayout.FloatField("Rotation Time (sec)", myTarget.rotationTime);
                 break;
             case Door.SpeedType.Curve:
+                myTarget.curveFactor = EditorGUILayout.FloatField("Curve Factor", myTarget.curveFactor);
                 myTarget.curve = EditorGUILayout.CurveField("Curve", myTarget.curve, GUILayout.Height(100));
                 break;
         }
