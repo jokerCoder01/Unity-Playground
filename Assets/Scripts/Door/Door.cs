@@ -83,6 +83,16 @@ public class Door : MonoBehaviour {
             rotationAxis = Vector3.up;
         else if (hingePositionEnum == HingePosition.Top || hingePositionEnum == HingePosition.Bottom)
             rotationAxis = Vector3.right;
+
+        if (isSoundActive == true)
+            gameObject.AddComponent<AudioSource>();
+        else
+        {
+            if(gameObject.GetComponent<AudioSource>() != null)
+            {
+                Destroy(GetComponent<AudioSource>());
+            }
+        }
     }
 
     void Update()
@@ -100,7 +110,15 @@ public class Door : MonoBehaviour {
     //TEMP
     void OnMouseDown()
     {
-        isDoorInteracted = true;
+        if(isInteractionActive == true && interactionType == InteractionType.Click)
+        {
+            isDoorInteracted = true;
+            if (isDoorOpen == false)
+                PlaySound(1f);
+            else
+                PlaySound(-1f);
+        }
+            
     }
 
     private void RotateDoor(float direction, string debugMessage, bool _isDoorOpen)
@@ -162,6 +180,29 @@ public class Door : MonoBehaviour {
                     Debug.Log(debugMessage);
                 }
                 break;
+        }
+    }
+
+    private void PlaySound(float soundType)
+    {
+        //Opening Sounds
+        if(soundType == 1f && openingSounds.Count > 0)
+        {
+            int rand = Random.Range(0, openingSounds.Count);
+            Debug.Log(rand);
+            GetComponent<AudioSource>().PlayOneShot(openingSounds[rand]);
+        }
+        //Closing Sounds
+        else if(soundType == -1f && closingSounds.Count > 0)
+        {
+            int rand = Random.Range(0, closingSounds.Count);
+            GetComponent<AudioSource>().PlayOneShot(closingSounds[rand]);
+        }
+        //Knock Sounds
+        else if(soundType == 0f && knockSounds.Count > 0)
+        {
+            int rand = Random.Range(0, knockSounds.Count);
+            GetComponent<AudioSource>().PlayOneShot(knockSounds[rand]);
         }
     }
 
