@@ -13,11 +13,11 @@ TagManager:
   - UI
   - 
   - 
-  - PostProcessing
-  - 
-  - 
-  - 
-  - 
+  - SamplePot
+  - SamplePotLid
+  - SampleSpheres
+  - CalibrationScales
+  - Reflectors
   - 
   - 
   - 
